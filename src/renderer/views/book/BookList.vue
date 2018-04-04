@@ -229,6 +229,7 @@
                 this.fetchTableData()
             },
             handleSearch() {
+                this.pageIndex = 1
                 this.fetchTableData()
             },
             remove(index) {

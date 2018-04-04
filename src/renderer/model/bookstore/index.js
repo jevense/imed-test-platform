@@ -17,3 +17,7 @@ export const Amount = require('./bs_amount')(sequelize, Sequelize)
 export const BonusAmount = require('./bs_bonus_amount')(sequelize, Sequelize)
 export const PurchasedBooks = require('./bs_purchased_books')(sequelize, Sequelize)
 export const Book = require('./bs_book')(sequelize, Sequelize)
+export const DiscountTime = require('./bs_discount_time')(sequelize, Sequelize)
+export const DiscountBookMap = require('./bs_discount_time_discount_book_map')(sequelize, Sequelize)
+
+DiscountTime.hasMany(DiscountBookMap, {as: 'discountBookMap', foreignKey: 'bs_fk_discount_time'})

@@ -178,6 +178,7 @@
                 this.fetchTableData()
             },
             handleSearch() {
+                this.pageIndex = 1
                 this.fetchTableData()
             },
             handleCellChange(val, index, key) {

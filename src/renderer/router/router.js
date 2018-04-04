@@ -61,7 +61,14 @@ export const otherRouter = {
             title: '订单详情',
             name: 'user-books',
             component: () => import('../views/book/BookList')
-        }]
+        },
+        {
+            path: 'activities/:instituteNumber/times',
+            title: '组织折扣',
+            name: 'activities-times',
+            component: () => import('../views/activities/DiscountTime')
+        }
+    ]
 };
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
@@ -118,6 +125,23 @@ export const appRouter = [
             path: 'form',
             title: '图书上下架',
             name: 'book-form',
+            component: Page,
+        }]
+    }, {
+        path: '/activities',
+        name: 'activities',
+        icon: 'ios-folder',
+        title: '活动',
+        component: Main,
+        children: [{
+            path: 'list',
+            name: 'activities-list',
+            title: '组织折扣',
+            component: () => import('../views/activities/OrganizationList'),
+        }, {
+            path: 'form',
+            title: '暂未开发',
+            name: 'activities-form',
             component: Page,
         }]
     }

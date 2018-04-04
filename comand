@@ -1,5 +1,8 @@
 sequelize-auto -o "./cadb" -d ca_db_3.0 -h 60.205.209.147 -u root -p 3306 -x weiyouxinda -e mysql
 
+sequelize-auto -o "./bookstore" -d book_store_3.0 -h 60.205.209.147 -u root -p 3306 -x weiyouxinda -e mysql
+
+
 
 var SequelizeAuto = require('sequelize-auto')
 var auto = new SequelizeAuto('database', 'user', 'pass');

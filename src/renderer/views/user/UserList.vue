@@ -134,6 +134,7 @@
                 })
             },
             handleSearch() {
+                this.pageIndex = 1
                 this.fetchTableData()
             },
         }
