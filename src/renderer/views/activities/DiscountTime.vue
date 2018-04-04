@@ -3,13 +3,13 @@
         <i-table :columns="columns" :data="data" stripe></i-table>
         <Form ref="formDynamic" :model="formDynamic" :label-width="100">
             <Card
-                    v-for="(item,ind) in formDynamic.items"
+                    v-for="(item,index) in formDynamic.items"
                     v-if="item.status"
                     :key="item.id"
             >
                 <Row>
                     <i-col span="4">
-                        <div v-text="`优惠${index}`" style="margin: 10px;"></div>
+                        <div v-text="`优惠${index+1}`" style="margin: 10px;"></div>
                     </i-col>
                     <i-col span="16">
                         <FormItem label="生效时间段："
@@ -29,12 +29,10 @@
                                   :rules="{required: true, type: 'array', min: 1, message: '通关包不能为空', trigger: 'change'}"
                         >
                             <Select
+                                    :label="initLabel"
                                     multiple
                                     v-model="item.isbn"
-                                    label="所有通关包"
-                                    filterable
                                     remote
-                                    label-in-value
                                     placeholder="请选择通关包"
                                     :remote-method="remoteMethod"
                                     :loading="loading"
@@ -102,7 +100,7 @@
                 }
             };
             return {
-                index: 1,
+                initLabel: [],
                 formDynamic: {
                     items: [
                         {
@@ -144,7 +142,7 @@
                             return h('div', isbns.map(item => {
                                 if (item === '@all-exam') return '全部通过包'
                                 return this.isbnMap[item]
-                            }).join(','))
+                            }).join('/'))
                         }
                     },
                     {
@@ -157,21 +155,22 @@
                         title: '操作',
                         align: 'center',
                         render: (h, {row: {id, enable}}) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            console.log('=====')
-                                        }
+                            let modify = h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.modify(id)
                                     }
-                                }, '修改'),
+                                }
+                            }, '修改')
+                            return h('div', [
+                                modify,
                                 h('Button', {
                                     props: {
                                         type: enable ? 'error' : 'success',
@@ -187,16 +186,14 @@
                         }
                     }
                 ],
+                mode: 'create',
                 data: [],
-                instituteNumber: 'lz360302'
+                instituteNumber: this.$route.params['instituteNumber']
             }
         },
         methods: {
             fetchTableData() {
                 this.loading = true
-
-                // let {instituteNumber,} = this.$route.params
-
                 DiscountTime.findAll({
                     where: {
                         organization: `${this.instituteNumber}`,
@@ -271,21 +268,27 @@
 
                     discountTimeList.forEach(item => {
                         DiscountTime.upsert(item).then(created => {
-                            let discountBook = discountBookMap.get(item.id)
-                            discountBook.forEach(ite => {
-                                return DiscountBookMap.upsert(ite).then(created => {
-                                    return DiscountTime.findById(item.id).then(discountTime => {
-                                        return DiscountBookMap.findOne({
-                                            where: {
-                                                bs_fk_discount_time: discountTime.bs_fk_discount_time,
-                                                isbn: discountTime.isbn,
-                                            }
-                                        }).then(discountBookMap => {
-                                            return discountTime.addDiscountBookMap(discountBookMap)
-                                        }).then(() => {
-                                            this.fetchTableData()
-                                            this.formDynamic.items.splice(0, this.formDynamic.items.length)
-                                            this.formDynamic.items.push(this.getInitForm())
+                            DiscountTime.findById(item.id).then(discountTime => {
+                                DiscountBookMap.destroy({
+                                    where: {
+                                        bs_fk_discount_time: discountTime.id
+                                    },
+                                }).then(() => {
+                                    let discountBook = discountBookMap.get(discountTime.id)
+                                    discountBook.forEach(ite => {
+                                        return DiscountBookMap.upsert(ite).then(created => {
+                                            return DiscountBookMap.findOne({
+                                                where: {
+                                                    bs_fk_discount_time: discountTime.bs_fk_discount_time,
+                                                    isbn: discountTime.isbn,
+                                                }
+                                            }).then(discountBookMap => {
+                                                return discountTime.addDiscountBookMap(discountBookMap)
+                                            }).then(() => {
+                                                this.fetchTableData()
+                                                this.formDynamic.items.splice(0, this.formDynamic.items.length)
+                                                this.formDynamic.items.push(this.getInitForm())
+                                            })
                                         })
                                     })
                                 })
@@ -298,7 +301,6 @@
                 this.$refs[name].resetFields();
             },
             handleAdd() {
-                this.index++;
                 this.formDynamic.items.push(this.getInitForm());
             },
             handleRemove(index) {
@@ -334,14 +336,51 @@
                     this.fetchTableData()
                 })
             },
+            modify(id) {
+                this.loading = true
+                let target = this.formDynamic.items
+                target.splice(0, target.length)
+                DiscountTime.findOne({
+                    where: {id,},
+                    attributes: ['id', 'enable', ['start_date', 'startDate'], ['end_date', 'endDate'], 'organization',],
+                    include: ['discountBookMap'],
+                }).then(({dataValues}) => {
+
+                    let {
+                        id,
+                        enable,
+                        startDate,
+                        endDate,
+                        discountBookMap,
+                    } = dataValues
+
+                    let {isbn = []} = {isbn: discountBookMap.map(item => item.isbn)}
+                    let {discount = 0} = {discount: discountBookMap.map(item => parseInt(item.discount))[0]}
+
+                    this.initLabel = isbn.map(item => {
+                        if (item === '@all-exam') return '全部通过包'
+                        return this.isbnMap[item]
+                    })
+                    target.push({
+                        id,
+                        enable,
+                        isbn,
+                        discount,
+                        status: 1,
+                        timePeriod: [startDate.toLocaleDateString(), endDate.toLocaleDateString()],
+                    });
+                    this.loading = false
+                });
+
+            },
             getInitForm() {
                 return {
-                    timePeriod: ['', ''],
+                    id: UUID.v1().replace(/-/g, ''),
+                    enable: true,
                     isbn: [],
+                    timePeriod: ['', ''],
                     discount: 10,
                     status: 1,
-                    enable: true,
-                    id: UUID.v1().replace(/-/g, ''),
                 }
             }
         }
