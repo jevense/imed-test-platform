@@ -137,11 +137,11 @@
                         }
                     },
                     {
-                        title: '通过包类型',
+                        title: '通关包类型',
                         align: 'center',
                         render: (h, {row: {isbns}}) => {
                             return h('div', isbns.map(item => {
-                                if (item === '@all-exam') return '全部通过包'
+                                if (item === '@all-exam') return '全部通关包'
                                 return this.isbnMap[item]
                             }).join('/'))
                         }
@@ -359,7 +359,7 @@
                     let {discount = 0} = {discount: discountBookMap.map(item => parseInt(item.discount))[0]}
 
                     this.initLabel = isbn.map(item => {
-                        if (item === '@all-exam') return '全部通过包'
+                        if (item === '@all-exam') return '全部通关包'
                         return this.isbnMap[item]
                     })
                     target.push({
