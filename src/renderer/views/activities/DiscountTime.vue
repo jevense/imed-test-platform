@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Card><span v-text="this.$route.params['name']"></span></Card>
         <i-table :columns="columns" :data="data" stripe></i-table>
         <Form ref="formDynamic" :model="formDynamic" :label-width="100">
             <Card

@@ -1,5 +1,6 @@
 import {Sequelize} from 'sequelize'
 // 创建数据库连接
+
 const sequelize = new Sequelize('book_store_3.0', 'root', 'weiyouxinda', {
     host: '60.205.209.147',
     dialect: 'mysql',
@@ -9,6 +10,16 @@ const sequelize = new Sequelize('book_store_3.0', 'root', 'weiyouxinda', {
         idle: 10000
     }
 })
+
+// const sequelize = new Sequelize('book_store', 'lujiewen', 'MVW2018china', {
+//     host: 'rm-2ze9qof5ae28lu55ao.mysql.rds.aliyuncs.com',
+//     dialect: 'mysql',
+//     pool: {
+//         max: 5,
+//         min: 0,
+//         idle: 10000
+//     }
+// })
 
 export default sequelize
 export const Op = Sequelize.Op

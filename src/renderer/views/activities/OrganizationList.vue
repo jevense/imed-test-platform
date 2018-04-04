@@ -40,6 +40,7 @@
                     {
                         title: '组织名称',
                         key: 'name',
+                        width: 350,
                         // align: 'center'
                     },
                     {
@@ -70,7 +71,7 @@
                         title: '详情',
                         align: 'center',
                         width: 150,
-                        render: (h, {row: {instituteNumber}}) => {
+                        render: (h, {row: {instituteNumber, name,}}) => {
                             return h('Button', {
                                 props: {
                                     type: 'text',
@@ -80,7 +81,7 @@
                                     click: () => {
                                         this.$router.push({
                                             name: 'activities-times',
-                                            params: {instituteNumber,}
+                                            params: {instituteNumber, name,}
                                         });
                                     }
                                 }
