@@ -2,29 +2,52 @@
 
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('ca_t_institute', {
-        caId: {
+        caid: {
             type: DataTypes.STRING(36),
             allowNull: false,
             primaryKey: true
         },
+        comments: {
+            type: DataTypes.STRING(2000),
+            allowNull: true
+        },
+        createtime: {
+            type: DataTypes.DATE,
+            allowNull: true
+        },
+        modifieddate: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+        },
+        deleted: {
+            type: DataTypes.INTEGER(1),
+            allowNull: false,
+            defaultValue: '0'
+        },
+        parentid: {
+            type: DataTypes.STRING(36),
+            allowNull: true,
+            references: {
+                model: 'ca_t_institute',
+                key: 'caid'
+            }
+        },
+        hassubinstitutes: {
+            type: DataTypes.INTEGER(1),
+            allowNull: false,
+            defaultValue: '0'
+        },
+        nationalnum: {
+            type: DataTypes.STRING(50),
+            allowNull: true
+        },
         name: {
             type: DataTypes.STRING(255),
-            allowNull: true
-        },
-        roles: {
-            type: DataTypes.STRING(500),
-            allowNull: true
-        },
-        account: {
-            type: DataTypes.STRING(50),
             allowNull: true,
             unique: true
         },
-        pwd: {
-            type: DataTypes.STRING(100),
-            allowNull: true
-        },
-        provinceCode: {
+        provincecode: {
             type: DataTypes.STRING(50),
             allowNull: true,
             references: {
@@ -32,7 +55,7 @@ module.exports = function (sequelize, DataTypes) {
                 key: 'code'
             }
         },
-        cityCode: {
+        citycode: {
             type: DataTypes.STRING(50),
             allowNull: true,
             references: {
@@ -40,32 +63,11 @@ module.exports = function (sequelize, DataTypes) {
                 key: 'code'
             }
         },
-        districtCode: {
+        districtcode: {
             type: DataTypes.STRING(50),
             allowNull: true,
             references: {
                 model: 'ca_t_area',
-                key: 'code'
-            }
-        },
-        instituteNumber: {
-            type: DataTypes.STRING(50),
-            allowNull: true,
-            unique: true
-        },
-        instituteTypeCode: {
-            type: DataTypes.STRING(50),
-            allowNull: true,
-            references: {
-                model: 'ca_t_institutetype',
-                key: 'code'
-            }
-        },
-        instituteStatusCode: {
-            type: DataTypes.STRING(50),
-            allowNull: true,
-            references: {
-                model: 'ca_t_institutestatus',
                 key: 'code'
             }
         },
@@ -73,19 +75,40 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING(1000),
             allowNull: true
         },
-        postNumber: {
+        postnumber: {
             type: DataTypes.STRING(50),
             allowNull: true
         },
-        webSite: {
+        website: {
             type: DataTypes.STRING(255),
             allowNull: true
         },
-        linkmanName: {
+        institutetypecode: {
+            type: DataTypes.STRING(50),
+            allowNull: true,
+            references: {
+                model: 'ca_t_institutetype',
+                key: 'code'
+            }
+        },
+        institutestatuscode: {
+            type: DataTypes.STRING(50),
+            allowNull: true,
+            references: {
+                model: 'ca_t_institutestatus',
+                key: 'code'
+            }
+        },
+        institutenumber: {
+            type: DataTypes.STRING(50),
+            allowNull: true,
+            unique: true
+        },
+        linkmanname: {
             type: DataTypes.STRING(255),
             allowNull: true
         },
-        linkmanGenderCode: {
+        linkmangendercode: {
             type: DataTypes.STRING(50),
             allowNull: true,
             references: {
@@ -93,23 +116,27 @@ module.exports = function (sequelize, DataTypes) {
                 key: 'code'
             }
         },
-        linkmanDepartment: {
+        linkmandepartment: {
             type: DataTypes.STRING(255),
             allowNull: true
         },
-        linkmanTel: {
+        linkmantel: {
             type: DataTypes.STRING(200),
             allowNull: true
         },
-        linkmanPhone: {
+        linkmanphone: {
             type: DataTypes.STRING(50),
             allowNull: true
         },
-        linkmanEmail: {
+        linkmanemail: {
             type: DataTypes.STRING(255),
             allowNull: true
         },
-        collegeRegistrationLevelCode: {
+        logo: {
+            type: DataTypes.STRING(1000),
+            allowNull: true
+        },
+        collegeregistrationlevelcode: {
             type: DataTypes.STRING(50),
             allowNull: true,
             references: {
@@ -117,7 +144,7 @@ module.exports = function (sequelize, DataTypes) {
                 key: 'code'
             }
         },
-        collegeTypeCode: {
+        collegetypecode: {
             type: DataTypes.STRING(50),
             allowNull: true,
             references: {
@@ -125,7 +152,7 @@ module.exports = function (sequelize, DataTypes) {
                 key: 'code'
             }
         },
-        hospitalTypeCode: {
+        hospitaltypecode: {
             type: DataTypes.STRING(50),
             allowNull: true,
             references: {
@@ -133,7 +160,7 @@ module.exports = function (sequelize, DataTypes) {
                 key: 'code'
             }
         },
-        hospitalLevelCode: {
+        hospitallevelcode: {
             type: DataTypes.STRING(50),
             allowNull: true,
             references: {
@@ -141,7 +168,15 @@ module.exports = function (sequelize, DataTypes) {
                 key: 'code'
             }
         },
-        hospitalRegistrationTypeCode: {
+        hospitalgradecode: {
+            type: DataTypes.STRING(50),
+            allowNull: true,
+            references: {
+                model: 'ca_t_hospitalgrade',
+                key: 'code'
+            }
+        },
+        hospitalregistrationtypecode: {
             type: DataTypes.STRING(50),
             allowNull: true,
             references: {
@@ -149,49 +184,32 @@ module.exports = function (sequelize, DataTypes) {
                 key: 'code'
             }
         },
-        comments: {
-            type: DataTypes.STRING(2000),
-            allowNull: true
-        },
-        deleted: {
-            type: DataTypes.INTEGER(1),
-            allowNull: true
-        },
-        parentId: {
+        medicalinstitutetypecode: {
             type: DataTypes.STRING(50),
-            allowNull: true
+            allowNull: true,
+            references: {
+                model: 'ca_t_medicalinsitutetype',
+                key: 'code'
+            }
         },
-        concurrentLimit: {
-            type: DataTypes.INTEGER(11),
-            allowNull: true
-        },
-        userLimit: {
-            type: DataTypes.INTEGER(11),
-            allowNull: true
-        },
-        hasSubInstitutes: {
-            type: DataTypes.INTEGER(11),
-            allowNull: false
-        },
-        logo: {
-            type: DataTypes.STRING(1000),
-            allowNull: true
-        },
-        nationalNum: {
+        medicalinstitutecharactercode: {
             type: DataTypes.STRING(50),
+            allowNull: true,
+            references: {
+                model: 'ca_t_medicalinsitutecharacter',
+                key: 'code'
+            }
+        },
+        concurrentlimit: {
+            type: DataTypes.INTEGER(11),
             allowNull: true
         },
-        createTime: {
-            type: DataTypes.DATE,
+        userlimit: {
+            type: DataTypes.INTEGER(11),
             allowNull: true
-        },
-        modifiedDate: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
         }
     }, {
         tableName: 'ca_t_institute',
-        timestamps: false,
+        timestamps: false
     });
 };

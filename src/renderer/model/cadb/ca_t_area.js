@@ -15,7 +15,7 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING(2000),
             allowNull: true
         },
-        higherCode: {
+        parentcode: {
             type: DataTypes.STRING(50),
             allowNull: true,
             references: {
@@ -25,6 +25,6 @@ module.exports = function (sequelize, DataTypes) {
         }
     }, {
         tableName: 'ca_t_area',
-        timestamps: false,
+        timestamps: false
     });
 };

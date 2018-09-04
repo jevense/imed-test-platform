@@ -49,10 +49,6 @@
                         key: 'caId'
                     },
                     {
-                        title: '角色',
-                        key: 'roles'
-                    },
-                    {
                         title: '机构编码',
                         key: 'instituteNumber'
                     },
@@ -107,7 +103,7 @@
                     },
                     offset: (this.pageIndex - 1) * this.pageSize,
                     limit: this.pageSize,
-                    attributes: ['cellphone', 'name', 'caId', 'roles', 'instituteNumber'],
+                    attributes: ['cellphone', 'name', 'caId', 'instituteNumber'],
                     order: [['modifiedDate', 'DESC']],
                 }).then(result => {
                     this.totalCount = result.count

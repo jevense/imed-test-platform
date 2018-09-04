@@ -127,13 +127,19 @@ export const appRouter = [
             name: 'book-form',
             component: Page,
         }]
-    }, {
+    },
+    {
         path: '/activities',
         name: 'activities',
         icon: 'ios-folder',
         title: '活动',
         component: Main,
         children: [{
+            path: 'read-coin',
+            name: 'read-coin',
+            title: '营销',
+            component: () => import('../views/activities/ReadCoin'),
+        }, {
             path: 'list',
             name: 'activities-list',
             title: '组织折扣',

@@ -182,6 +182,7 @@
                 this.fetchTableData()
             },
             handleCellChange(val, index, key) {
+                this.loading = true
                 let {
                     id = UUID.v1().replace(/-/g, ''),
                     caId,
@@ -220,6 +221,7 @@
                             status: '0',
                         }).then(created => {
                             this.$Message.success('阅点修改成功')
+                            return created
                         })
                     } else {
                         Amount.upsert({
@@ -230,8 +232,12 @@
                             account_id: id,
                         }).then(created => {
                             this.$Message.success('阅点修改成功')
+                            return created
                         })
                     }
+                    return [instance, created]
+                }).finally(() => {
+                    this.loading = false
                 })
             },
         }

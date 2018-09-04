@@ -57,6 +57,7 @@
   "dependencies": {
     "axios": "^0.16.1",
     "crypto-js": "^3.1.9-1",
+    "graphql": "^0.13.2",
     "hiredis": "^0.5.0",
     "iview": "^2.11.0",
     "js-cookie": "^2.2.0",

@@ -1,17 +1,8 @@
 import {Sequelize} from 'sequelize'
 // 创建数据库连接
 
-const sequelize = new Sequelize('ca_db_3.0', 'root', 'weiyouxinda', {
-    host: '60.205.209.147',
-    dialect: 'mysql',
-    pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
-    }
-})
-// const sequelize = new Sequelize('ca_db', 'lujiewen', 'MVW2018china', {
-//     host: 'rm-2ze4mz4fu2pe03i4ho.mysql.rds.aliyuncs.com',
+// const sequelize = new Sequelize('ca_db_5002_v2.0', 'root', 'weiyouxinda', {
+//     host: '60.205.209.147',
 //     dialect: 'mysql',
 //     pool: {
 //         max: 5,
@@ -20,15 +11,15 @@ const sequelize = new Sequelize('ca_db_3.0', 'root', 'weiyouxinda', {
 //     }
 // })
 
-// const sequelize = new Sequelize('ca_db_3.0', 'root', '', {
-//     host: 'localhost',
-//     dialect: 'mysql',
-//     pool: {
-//         max: 5,
-//         min: 0,
-//         idle: 10000
-//     }
-// })
+const sequelize = new Sequelize('cadb2', 'lujiewen', 'MVW2018china', {
+    host: 'rm-2ze9qof5ae28lu55ao.mysql.rds.aliyuncs.com',
+    dialect: 'mysql',
+    pool: {
+        max: 5,
+        min: 0,
+        idle: 10000
+    }
+})
 
 export default sequelize
 

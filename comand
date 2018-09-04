@@ -1,4 +1,4 @@
-sequelize-auto -o "./cadb" -d ca_db_3.0 -h 60.205.209.147 -u root -p 3306 -x weiyouxinda -e mysql
+sequelize-auto -o "./ca_db_5002_v2.0" -d ca_db_5002_v2.0 -h 60.205.209.147 -u root -p 3306 -x weiyouxinda -e mysql
 
 sequelize-auto -o "./bookstore" -d book_store_3.0 -h 60.205.209.147 -u root -p 3306 -x weiyouxinda -e mysql
 
